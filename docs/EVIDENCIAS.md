@@ -2,26 +2,24 @@
 
 Este documento lista os prints necessários para montar o PDF final. Não utilize imagens simuladas: todas as evidências devem vir da execução real.
 
-## Organização sugerida
+## Organização atual
 
-Salve os arquivos nesta pasta com nomes numerados:
+As capturas disponíveis já estão nesta pasta com nomes descritivos:
 
 ```text
 docs/evidencias/
-├── 01-site-local.png
-├── 02-docker-build.png
-├── 03-container-local.png
-├── 04-docker-hub-publico.png
-├── 05-tag-cp04.png
-├── 06-vpc.png
-├── 07-subnet-publica.png
-├── 08-internet-gateway.png
-├── 09-tabela-de-rotas.png
-├── 10-security-group.png
-├── 11-ec2-running.png
-├── 12-terraform-apply.png
-└── 13-site-ec2.png
+├── 01-site-namespaces-cgroups.png
+├── 02-site-portal-ec2.png
+├── 03-cloudshell-vpc-subnet-igw.png
+├── 04-cloudshell-rotas-associacao.png
+├── 05-cloudshell-security-group-ec2.png
+├── 06-ec2-detalhes-rede.png
+├── 07-cloudshell-ec2-running.png
+├── 08-cloudshell-terraform-output.png
+└── 09-cloudshell-igw-rotas.png
 ```
+
+O pacote ainda precisa das capturas do topo do portal com nome/RM/turma, do build e container Docker e do Docker Hub público com a tag `cp04` para atender todos os itens do checklist visual.
 
 ## Checklist por critério
 

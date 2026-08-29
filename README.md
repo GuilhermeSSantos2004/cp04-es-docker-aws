@@ -48,6 +48,24 @@ O endereço IP é temporário e pode mudar se a instância for recriada. As evid
 
 > O PDF final deve ser gerado somente depois do deploy, pois precisa conter prints reais da imagem pública, da infraestrutura AWS e da URL funcionando.
 
+## Evidências visuais
+
+As capturas reais disponíveis estão reunidas em [`docs/evidencias/`](docs/evidencias/), com nomes numerados para facilitar a conferência:
+
+| Arquivo | Conteúdo |
+|---|---|
+| [`01-site-namespaces-cgroups.png`](docs/evidencias/01-site-namespaces-cgroups.png) | Portal com as seções Namespaces e cgroups |
+| [`02-site-portal-ec2.png`](docs/evidencias/02-site-portal-ec2.png) | Portal publicado na EC2 |
+| [`03-cloudshell-vpc-subnet-igw.png`](docs/evidencias/03-cloudshell-vpc-subnet-igw.png) | VPC, sub-rede pública e Internet Gateway |
+| [`04-cloudshell-rotas-associacao.png`](docs/evidencias/04-cloudshell-rotas-associacao.png) | Rota `0.0.0.0/0` e associação com a sub-rede |
+| [`05-cloudshell-security-group-ec2.png`](docs/evidencias/05-cloudshell-security-group-ec2.png) | Security Group TCP 80 e dados da EC2 |
+| [`06-ec2-detalhes-rede.png`](docs/evidencias/06-ec2-detalhes-rede.png) | Detalhes de rede e IP público da EC2 |
+| [`07-cloudshell-ec2-running.png`](docs/evidencias/07-cloudshell-ec2-running.png) | EC2 em execução e saída do Terraform |
+| [`08-cloudshell-terraform-output.png`](docs/evidencias/08-cloudshell-terraform-output.png) | Saída final do Terraform com `site_url` |
+| [`09-cloudshell-igw-rotas.png`](docs/evidencias/09-cloudshell-igw-rotas.png) | Internet Gateway e tabela de rotas |
+
+Para completar o checklist do PDF, ainda devem ser adicionadas nesta mesma pasta as capturas do topo do portal com nome/RM/turma, do `docker build` com `docker ps` e do Docker Hub público com a tag `cp04`, caso o professor exija esses prints individualmente.
+
 ## Arquitetura
 
 ```mermaid
