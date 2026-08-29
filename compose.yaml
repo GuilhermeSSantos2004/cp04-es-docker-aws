@@ -1,0 +1,9 @@
+services:
+  site:
+    build:
+      context: .
+    image: cp04-site:local
+    container_name: cp04-site
+    ports:
+      - "8080:80"
+    restart: unless-stopped

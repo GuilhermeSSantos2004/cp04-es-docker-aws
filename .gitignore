@@ -1,0 +1,27 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+tfplan
+
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Arquivos temporários
+*.tmp
+*.log

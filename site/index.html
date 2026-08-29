@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portal CP04 sobre containers, namespaces e cgroups, desenvolvido por Guilherme Silva dos Santos."
+    />
+    <title>CP04 | Containers na Nuvem</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #07111f;
+        --surface: #0d1b2d;
+        --surface-soft: #12243a;
+        --text: #f4f7fb;
+        --muted: #a9b8ca;
+        --line: rgba(255, 255, 255, 0.1);
+        --orange: #ff9d32;
+        --cyan: #53d8fb;
+        --green: #59e6a7;
+        --shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background:
+          radial-gradient(circle at 12% 8%, rgba(83, 216, 251, 0.12), transparent 30rem),
+          radial-gradient(circle at 92% 18%, rgba(255, 157, 50, 0.12), transparent 28rem),
+          var(--background);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: -4rem;
+        z-index: 10;
+        border-radius: 0.65rem;
+        background: var(--text);
+        color: var(--background);
+        padding: 0.75rem 1rem;
+      }
+
+      .skip-link:focus {
+        top: 1rem;
+      }
+
+      .page-shell {
+        width: min(1120px, calc(100% - 2rem));
+        margin-inline: auto;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 6.5rem 0 4.5rem;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 28rem;
+        height: 28rem;
+        right: -10rem;
+        top: 1rem;
+        border: 1px solid rgba(83, 216, 251, 0.2);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 4rem rgba(83, 216, 251, 0.03),
+          0 0 0 8rem rgba(255, 157, 50, 0.025);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin: 0 0 1.4rem;
+        border: 1px solid rgba(89, 230, 167, 0.28);
+        border-radius: 999px;
+        background: rgba(89, 230, 167, 0.08);
+        color: #a8f4ce;
+        padding: 0.42rem 0.8rem;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 0.52rem;
+        height: 0.52rem;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 1rem var(--green);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 800px;
+        margin-bottom: 1.25rem;
+        font-size: clamp(3rem, 8vw, 6.7rem);
+        line-height: 0.95;
+        letter-spacing: -0.065em;
+      }
+
+      h1 span {
+        color: var(--orange);
+      }
+
+      .hero-copy {
+        max-width: 720px;
+        margin-bottom: 2rem;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      }
+
+      .identity {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin: 0;
+      }
+
+      .identity div {
+        display: flex;
+        gap: 0.42rem;
+        border: 1px solid var(--line);
+        border-radius: 0.85rem;
+        background: rgba(13, 27, 45, 0.72);
+        padding: 0.7rem 0.9rem;
+        backdrop-filter: blur(14px);
+      }
+
+      .identity dt {
+        color: var(--muted);
+      }
+
+      .identity dd {
+        margin: 0;
+        font-weight: 750;
+      }
+
+      main {
+        padding-bottom: 5rem;
+      }
+
+      .section {
+        padding: 2.25rem 0;
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 2rem;
+        align-items: end;
+        margin-bottom: 1.6rem;
+      }
+
+      .kicker {
+        margin-bottom: 0.55rem;
+        color: var(--cyan);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-size: clamp(2rem, 5vw, 3.7rem);
+        line-height: 1.05;
+        letter-spacing: -0.045em;
+      }
+
+      .section-heading > p:last-child {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .concept-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 100%;
+        border: 1px solid var(--line);
+        border-radius: 1.35rem;
+        background: linear-gradient(145deg, rgba(18, 36, 58, 0.96), rgba(10, 24, 40, 0.92));
+        padding: clamp(1.35rem, 3vw, 2rem);
+        box-shadow: var(--shadow);
+      }
+
+      .concept-card::before {
+        content: attr(data-index);
+        position: absolute;
+        right: 1.3rem;
+        top: 0.75rem;
+        color: rgba(255, 255, 255, 0.05);
+        font-size: 5rem;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .concept-card h3 {
+        margin-bottom: 0.7rem;
+        font-size: 1.55rem;
+      }
+
+      .concept-card > p {
+        color: var(--muted);
+      }
+
+      .concept-card strong {
+        color: var(--text);
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tag-list li {
+        border: 1px solid rgba(83, 216, 251, 0.22);
+        border-radius: 999px;
+        background: rgba(83, 216, 251, 0.07);
+        color: #bdefff;
+        padding: 0.35rem 0.65rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.78rem;
+      }
+
+      .resource-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .resource-list li {
+        border-left: 2px solid var(--orange);
+        background: rgba(255, 157, 50, 0.07);
+        padding: 0.55rem 0.7rem;
+        font-weight: 700;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1.2rem;
+        align-items: start;
+        margin-top: 1rem;
+        border: 1px solid rgba(255, 157, 50, 0.28);
+        border-radius: 1.2rem;
+        background: rgba(255, 157, 50, 0.08);
+        padding: 1.35rem;
+      }
+
+      .summary-mark {
+        display: grid;
+        place-items: center;
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 0.8rem;
+        background: var(--orange);
+        color: #231506;
+        font-size: 1.35rem;
+        font-weight: 900;
+      }
+
+      .summary p {
+        margin-bottom: 0;
+      }
+
+      .pipeline {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin: 1.7rem 0 0;
+        padding: 0;
+        counter-reset: pipeline;
+        list-style: none;
+      }
+
+      .pipeline li {
+        position: relative;
+        border-top: 2px solid var(--cyan);
+        border-radius: 0 0 1rem 1rem;
+        background: var(--surface);
+        padding: 1rem;
+        counter-increment: pipeline;
+      }
+
+      .pipeline li::before {
+        content: "0" counter(pipeline);
+        display: block;
+        margin-bottom: 0.75rem;
+        color: var(--cyan);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.8rem;
+        font-weight: 800;
+      }
+
+      .pipeline strong {
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+
+      .pipeline span {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .executive-note {
+        margin-top: 2rem;
+        border-radius: 1.35rem;
+        background: linear-gradient(120deg, var(--cyan), #80efc3);
+        color: #03121c;
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+      }
+
+      .executive-note p {
+        max-width: 850px;
+        margin-bottom: 0;
+        font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+        font-weight: 760;
+        line-height: 1.45;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        padding: 1.6rem 0 2.4rem;
+        font-size: 0.9rem;
+      }
+
+      footer .page-shell {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      @media (max-width: 760px) {
+        .hero {
+          padding-top: 4.5rem;
+        }
+
+        .section-heading,
+        .concept-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .pipeline {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 480px) {
+        .page-shell {
+          width: min(100% - 1.2rem, 1120px);
+        }
+
+        h1 {
+          font-size: 3rem;
+        }
+
+        .identity,
+        .identity div,
+        footer .page-shell {
+          display: grid;
+        }
+
+        .resource-list,
+        .pipeline,
+        .summary {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="hero">
+      <div class="page-shell">
+        <p class="eyebrow">Checkpoint 04 · Engenharia de Software</p>
+        <h1>Containers <span>na nuvem</span></h1>
+        <p class="hero-copy">
+          Uma visão direta de como o Linux combina isolamento e controle de recursos para executar aplicações de forma consistente, portátil e eficiente.
+        </p>
+        <dl class="identity" aria-label="Identificação do estudante">
+          <div><dt>Aluno</dt><dd>Guilherme Silva dos Santos</dd></div>
+          <div><dt>RM</dt><dd>551168</dd></div>
+          <div><dt>Turma</dt><dd>4ESPX</dd></div>
+        </dl>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <section class="section page-shell" aria-labelledby="isolamento-title">
+        <div class="section-heading">
+          <div>
+            <p class="kicker">Fundamentos</p>
+            <h2 id="isolamento-title">Isolar e controlar</h2>
+          </div>
+          <p>
+            Containers não são máquinas virtuais completas. Eles compartilham o kernel do host, mas enxergam ambientes separados e recebem limites próprios de recursos.
+          </p>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept-card" data-index="01">
+            <h3>Namespaces</h3>
+            <p>
+              Namespaces definem <strong>o que cada processo consegue enxergar</strong>. Eles criam visões isoladas de processos, rede, sistema de arquivos, usuários e outros elementos do sistema operacional.
+            </p>
+            <p>
+              Assim, um processo dentro do container pode acreditar que possui sua própria rede e sua própria árvore de processos, mesmo compartilhando o mesmo kernel com outros containers.
+            </p>
+            <ul class="tag-list" aria-label="Principais namespaces do Linux">
+              <li>PID · processos</li>
+              <li>NET · rede</li>
+              <li>MNT · arquivos</li>
+              <li>UTS · hostname</li>
+              <li>IPC · comunicação</li>
+              <li>USER · usuários</li>
+            </ul>
+          </article>
+
+          <article class="concept-card" data-index="02">
+            <h3>cgroups</h3>
+            <p>
+              Control Groups, ou cgroups, definem <strong>quanto cada grupo de processos pode consumir</strong>. Eles medem, priorizam e limitam recursos do host.
+            </p>
+            <p>
+              Isso impede que um container monopolize a máquina e prejudique os demais serviços. Também permite acompanhar o consumo e aplicar políticas diferentes a cada aplicação.
+            </p>
+            <ul class="resource-list" aria-label="Recursos controlados por cgroups">
+              <li>CPU</li>
+              <li>Memória</li>
+              <li>Disco e I/O</li>
+              <li>Quantidade de processos</li>
+            </ul>
+          </article>
+        </div>
+
+        <aside class="summary" aria-label="Resumo sobre containers">
+          <span class="summary-mark" aria-hidden="true">+</span>
+          <p>
+            <strong>Juntos, namespaces e cgroups formam a base dos containers:</strong> namespaces fornecem isolamento; cgroups fornecem controle. O Docker organiza essas capacidades e adiciona imagens, redes e uma experiência padronizada de execução.
+          </p>
+        </aside>
+      </section>
+
+      <section class="section page-shell" aria-labelledby="pipeline-title">
+        <div class="section-heading">
+          <div>
+            <p class="kicker">Do desenvolvimento à EC2</p>
+            <h2 id="pipeline-title">Uma entrega reproduzível</h2>
+          </div>
+          <p>
+            A mesma imagem validada localmente é publicada e executada na nuvem, reduzindo diferenças entre ambientes e simplificando o deploy.
+          </p>
+        </div>
+
+        <ol class="pipeline">
+          <li><strong>Portal</strong><span>O conteúdo é criado em HTML e CSS.</span></li>
+          <li><strong>Imagem</strong><span>O Dockerfile empacota o site com Nginx.</span></li>
+          <li><strong>Registro</strong><span>A imagem recebe a tag cp04 no Docker Hub.</span></li>
+          <li><strong>Nuvem</strong><span>A EC2 baixa a imagem e publica a porta 80.</span></li>
+        </ol>
+
+        <div class="executive-note">
+          <p>
+            Para o Conselho: containerização transforma a aplicação e suas dependências em uma unidade portátil. O resultado é uma implantação mais previsível, rápida e consistente em qualquer host compatível.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="page-shell">
+        <span>CP04 · Containers na Nuvem</span>
+        <span>FIAP · 4ESPX · 2026</span>
+      </div>
+    </footer>
+  </body>
+</html>
