@@ -63,6 +63,8 @@ O Terraform cria:
 ├── scripts/
 │   ├── deploy.ps1
 │   ├── deploy.sh
+│   ├── cloudshell-deploy.sh
+│   ├── cloudshell-destroy.sh
 │   ├── destroy.ps1
 │   ├── destroy.sh
 │   └── verify-environment.ps1
@@ -81,6 +83,51 @@ O Terraform cria:
 ├── Dockerfile
 └── README.md
 ```
+
+## Caminho recomendado: AWS CloudShell
+
+Este é o caminho mais simples para uma conta AWS Academy. O CloudShell já utiliza as credenciais temporárias da sessão do Console AWS e oferece Git, AWS CLI e Docker. O script do projeto também instala uma versão verificada do Terraform no diretório persistente do CloudShell.
+
+Antes de começar:
+
+1. Crie no Docker Hub um repositório público chamado `cp04-site`.
+2. No Docker Hub, crie um access token em **Account settings > Personal access tokens**.
+3. Não envie o token em mensagens ou salve-o no GitHub.
+4. No Console AWS, selecione a região `us-east-1` e abra o **CloudShell**.
+
+Cole no CloudShell:
+
+```bash
+git clone https://github.com/GuilhermeSSantos2004/cp04-es-docker-aws.git
+cd cp04-es-docker-aws
+chmod +x scripts/cloudshell-deploy.sh scripts/cloudshell-destroy.sh
+./scripts/cloudshell-deploy.sh
+```
+
+O script solicitará:
+
+- o nome de usuário do Docker Hub;
+- o access token do Docker Hub, digitado de forma oculta;
+- a palavra `APLICAR` depois que o plano do Terraform for exibido.
+
+Ele executa todo o fluxo:
+
+1. valida a sessão AWS;
+2. constrói e testa o container;
+3. publica `USUARIO/cp04-site:cp04`;
+4. confirma que a imagem está pública;
+5. instala e valida o Terraform;
+6. mostra o plano antes de criar recursos;
+7. cria VPC, rede, Security Group e EC2;
+8. testa a URL pública do portal.
+
+Depois de registrar todos os prints, remova os recursos:
+
+```bash
+./scripts/cloudshell-destroy.sh
+```
+
+O script de remoção exige a palavra `DESTRUIR`.
 
 ## 1. Preparar o computador
 
