@@ -39,8 +39,8 @@ if [[ -z "$DOCKERHUB_USER" ]]; then
   read -r -p "Digite somente seu usuário do Docker Hub: " DOCKERHUB_USER
 fi
 
-[[ "$DOCKERHUB_USER" =~ ^[a-z0-9][a-z0-9_-]+$ ]] || \
-  fail "Nome de usuário do Docker Hub inválido. Use letras minúsculas, números, hífen ou sublinhado."
+[[ "$DOCKERHUB_USER" =~ ^[a-z0-9]{4,30}$ ]] || \
+  fail "Docker ID inválido. Use de 4 a 30 caracteres contendo apenas letras minúsculas e números."
 
 DOCKER_IMAGE="$DOCKERHUB_USER/$DOCKER_REPOSITORY:cp04"
 
