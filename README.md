@@ -17,6 +17,23 @@ Projeto acadêmico da FIAP que demonstra a containerização de um portal estát
 
 > A URL da EC2 funciona enquanto a instância acadêmica estiver em execução. Registre as evidências antes de encerrar o laboratório ou destruir a infraestrutura.
 
+## Execução validada pelo AWS CloudShell
+
+Deploy validado em **28/08/2026**, na região `us-east-1`:
+
+- **Imagem Docker:** `guilhermessilva2004/cp04-site:cp04`
+- **Build e teste local:** aprovados no CloudShell
+- **Terraform apply:** concluído com 7 recursos criados
+- **EC2:** `t2.micro`, em execução, com acesso público
+- **VPC:** `10.0.0.0/24`
+- **Sub-rede pública:** `10.0.0.0/26`, com atribuição automática de IPv4 público
+- **Internet Gateway:** conectado à VPC
+- **Rota pública:** `0.0.0.0/0` para o Internet Gateway
+- **Security Group:** TCP `80` liberado para `0.0.0.0/0`
+- **Portal:** <http://3.85.240.135>
+
+O endereço IP é temporário e pode mudar se a instância for recriada. As evidências devem ser registradas antes de executar o script de destruição.
+
 ## Entregáveis atendidos
 
 | Exigência | Implementação |
