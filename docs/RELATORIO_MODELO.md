@@ -6,7 +6,7 @@
 - **RM:** 551168
 - **Turma:** 4ESPX
 - **Disciplina:** Engenharia de Software
-- **Data:** preencher
+- **Data:** 29/08/2026
 
 ## 1. Objetivo
 
@@ -54,6 +54,6 @@ Resumir como a containerização tornou a implantação reproduzível e como a i
 
 ## Links
 
-- **GitHub:** preencher
-- **Docker Hub:** preencher
-- **URL temporária da EC2:** preencher
+- **GitHub:** <https://github.com/GuilhermeSSantos2004/cp04-es-docker-aws>
+- **Docker Hub:** <https://hub.docker.com/r/guilhermessilva2004/cp04-site/tags>
+- **URL temporária da EC2:** <http://3.85.240.135>

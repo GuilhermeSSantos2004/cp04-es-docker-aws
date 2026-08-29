@@ -8,6 +8,15 @@ Projeto acadêmico da FIAP que demonstra a containerização de um portal estát
 - **RM:** 551168
 - **Turma:** 4ESPX
 
+## Links da execução
+
+- **GitHub:** <https://github.com/GuilhermeSSantos2004/cp04-es-docker-aws>
+- **Docker Hub:** <https://hub.docker.com/r/guilhermessilva2004/cp04-site/tags>
+- **Imagem:** `guilhermessilva2004/cp04-site:cp04`
+- **Portal temporário na EC2:** <http://3.85.240.135>
+
+> A URL da EC2 funciona enquanto a instância acadêmica estiver em execução. Registre as evidências antes de encerrar o laboratório ou destruir a infraestrutura.
+
 ## Entregáveis atendidos
 
 | Exigência | Implementação |
@@ -170,16 +179,14 @@ docker run --rm -p 8080:80 cp04-site:local
 
 ## 3. Publicar no Docker Hub
 
-Crie no Docker Hub um repositório público chamado `cp04-site`.
+O repositório público usado nesta atividade é `guilhermessilva2004/cp04-site`.
 
 ### Opção A - Pelo computador
 
-Substitua `SEU_USUARIO_DOCKERHUB`:
-
 ```powershell
 docker login
-docker build -t SEU_USUARIO_DOCKERHUB/cp04-site:cp04 .
-docker push SEU_USUARIO_DOCKERHUB/cp04-site:cp04
+docker build -t guilhermessilva2004/cp04-site:cp04 .
+docker push guilhermessilva2004/cp04-site:cp04
 ```
 
 Confirme no Docker Hub que:
@@ -197,7 +204,7 @@ Crie dois secrets no repositório GitHub:
 Depois, abra **Actions > Publicar no Docker Hub > Run workflow**. O workflow publicará:
 
 ```text
-SEU_USUARIO_DOCKERHUB/cp04-site:cp04
+guilhermessilva2004/cp04-site:cp04
 ```
 
 Nunca utilize sua senha normal do Docker Hub como secret. Gere um access token exclusivo.
@@ -255,10 +262,10 @@ Entre na pasta `terraform` e copie o arquivo de exemplo:
 Copy-Item .\terraform\terraform.tfvars.example .\terraform\terraform.tfvars
 ```
 
-Edite `terraform/terraform.tfvars` e substitua:
+Edite `terraform/terraform.tfvars` e confirme:
 
 ```hcl
-docker_image = "SEU_USUARIO_DOCKERHUB/cp04-site:cp04"
+docker_image = "guilhermessilva2004/cp04-site:cp04"
 ```
 
 O arquivo real `terraform.tfvars` é ignorado pelo Git para evitar publicar configurações locais.

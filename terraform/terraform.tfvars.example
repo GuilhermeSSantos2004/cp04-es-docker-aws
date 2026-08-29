@@ -2,8 +2,8 @@ aws_region   = "us-east-1"
 project_name = "cp04-es"
 instance_type = "t2.micro"
 
-# Substitua pelo seu usuário real do Docker Hub.
-docker_image = "SEU_USUARIO_DOCKERHUB/cp04-site:cp04"
+# Imagem pública criada para esta atividade.
+docker_image = "guilhermessilva2004/cp04-site:cp04"
 
 # Deixe ambos como null para não abrir a porta 22.
 # Para usar SSH, informe um key pair existente e apenas o seu IP público /32.
