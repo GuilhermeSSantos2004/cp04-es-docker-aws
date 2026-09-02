@@ -4,10 +4,13 @@ Projeto acadêmico da FIAP que demonstra a containerização de um portal estát
 
 ## Identificação
 
-- **Aluno:** Guilherme Silva dos Santos
-- **RM:** 551168
-- **Turma:** 4ESPX
+- Enricco Rossi de Souza Carvalho Miranda - RM551717
+- Gabriel Marquez Trevisan - RM99227
+- Guilherme Silva dos Santos - RM551168
+- Danilo urze aldred - RM99465
+- Laura Claro Mathias - RM98747
 
+- **Turma:** 4ESPX
 ## Links da execução
 
 - **GitHub:** <https://github.com/GuilhermeSSantos2004/cp04-es-docker-aws>
