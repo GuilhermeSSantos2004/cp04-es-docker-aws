@@ -1,3 +1,15 @@
+## Integrantes do grupo
+
+- Enricco Rossi de Souza Carvalho Miranda - RM551717
+- Gabriel Marquez Trevisan - RM99227
+- Guilherme Silva dos Santos - RM551168
+- Danilo Urze Aldred - RM99465
+- Laura Claro Mathias - RM98747
+
+**Turma:** 4ESPX
+
+---
+
 # CP04 - Containers na Nuvem
 
 Projeto acadêmico da FIAP que demonstra a containerização de um portal estático, a publicação da imagem no Docker Hub com a tag `cp04` e a execução do container em uma instância EC2.
@@ -7,7 +19,7 @@ Projeto acadêmico da FIAP que demonstra a containerização de um portal estát
 - Enricco Rossi de Souza Carvalho Miranda - RM551717
 - Gabriel Marquez Trevisan - RM99227
 - Guilherme Silva dos Santos - RM551168
-- Danilo urze aldred - RM99465
+- Danilo Urze Aldred - RM99465
 - Laura Claro Mathias - RM98747
 
 - **Turma:** 4ESPX
